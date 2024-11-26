@@ -5,7 +5,7 @@
     </div>
 
     <div class="col-lg-8 col-md-8 col-sm-12">
-        <app-search-input placeholder="Cerca sentieri per numero sentiero (eg: 100BO)"
+        <app-search-input placeholder="Cerca per numero sentiero (eg: 100BO)"
                           (onTypingChange)="onTrailSearch($event)"></app-search-input>
     </div>
     <div class="col-lg-4 col-md-4 col-sm-12">
@@ -55,7 +55,7 @@
               {{ getTrailCode(notification.trailId) }}
             </span>
                 </td>
-                <td class="ellipsis small-column" [innerHTML]="notification.description"></td>
+                <td class="ellipsis small-column" [title]="notification.description" [innerHTML]="notification.description"></td>
                 <td>{{ notification.minor === true ? "si" : "no" }}</td>
                 <td>
                     {{ notification.recordDetails.uploadedBy }}
