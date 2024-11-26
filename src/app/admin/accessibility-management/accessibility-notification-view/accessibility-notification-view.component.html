@@ -1,10 +1,15 @@
-<div class="AccessibilityNotificationView">
+<div class="AccessibilityNotificationView row">
     <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
     <div class="col-12 col-md-12 space-up">
         <h2>Segnalazioni di percorribilità</h2>
     </div>
-    <div class="col-12">
-        <button type="button" class="btn btn-primary" routerLink="./add"
+
+    <div class="col-lg-8 col-md-8 col-sm-12">
+        <app-search-input placeholder="Cerca sentieri per numero sentiero (eg: 100BO)"
+                          (onTypingChange)="onTrailSearch($event)"></app-search-input>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        <button type="button" class="btn btn-primary full-width" routerLink="./add"
                 *ngIf="authService.isRealmMatch()">
             + Crea segnalazione di percorribilità
         </button>
@@ -19,7 +24,7 @@
         ></app-trail-floating-preview>
     </div>
 
-    <div *ngIf="unresolvedNotifications.length > 0; else notShow" class="top-margin-x2">
+    <div *ngIf="unresolvedNotifications.length > 0; else notShow" class="top-margin-x2 col-12">
         <table class="table table-striped interactive-table">
             <thead>
             <tr>
@@ -28,7 +33,7 @@
                 <th scope="col">Sentiero</th>
                 <th scope="col">Descrizione Problema</th>
                 <th scope="col">Aggirabile?</th>
-                <th scope="col">Segnalato da</th>
+                <th scope="col">Approvato/Segn. da</th>
                 <th scope="col">Risolvi</th>
                 <th scope="col">Modifica</th>
                 <th scope="col">Cancella</th>

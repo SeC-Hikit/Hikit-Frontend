@@ -61,7 +61,8 @@
                                 *ngIf="selectIssueCause != 'Altro'"
                                 title="Scegli un'opzione"
                                 formControlName="cause"
-                                class="form-control">
+                                class="form-control"
+                                (change)="selectIssue($event)">
                             <option
                                     *ngFor="let foundIssue of foundIssues"
                                     value="{{ foundIssue }}"

@@ -30,7 +30,9 @@ export class NotificationService {
     }
 
     getUnresolved(skip: number, limit: number, realm?: string): Observable<AccessibilityNotificationResponse> {
-        let params = new HttpParams().set("skip", skip.toString()).append("limit", limit.toString())
+        let params = new HttpParams()
+            .set("skip", skip.toString())
+            .append("limit", limit.toString())
         if (realm) { params = params.append("realm", realm); }
         return this.httpClient.get<AccessibilityNotificationResponse>(this.baseUrl + "/unresolved", {params: params})
             .pipe(

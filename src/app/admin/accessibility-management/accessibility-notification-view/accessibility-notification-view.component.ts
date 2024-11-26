@@ -1,6 +1,5 @@
 import {Component, OnInit} from "@angular/core";
 import * as moment from "moment";
-import {Subject} from "rxjs";
 import {AccessibilityNotification, NotificationService,} from "src/app/service/notification-service.service";
 import {TrailPreviewService,} from "src/app/service/trail-preview-service.service";
 import {TrailDto, TrailMappingDto, TrailService} from "src/app/service/trail-service.service";
@@ -28,6 +27,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     isLoading = false;
 
     realm: string = "";
+    filterTrailId: string = ""
 
     totalUnresolvedNotification: number;
     totalSolvedNotification: number;
@@ -38,7 +38,6 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     selectedTrail: TrailDto;
     unresolvedNotifications: AccessibilityNotification[];
     solvedNotifications: AccessibilityNotification[];
-    notificationSaved: string;
     markers: Marker[] = [];
 
     constructor(
@@ -66,7 +65,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     loadNotification(page: number) {
         this.unresolvedPage = page;
         const lowerBound = this.entryPerPage * (page - 1);
-        this.loadUnresolved(lowerBound, this.entryPerPage * page, this.realm);
+        this.loadUnresolved(lowerBound, this.entryPerPage * page, this.realm, "");
     }
 
     loadSolvedNotification(page: number) {
@@ -75,8 +74,18 @@ export class AccessibilityNotificationViewComponent implements OnInit {
         this.loadResolved(lowerBound, this.entryPerPage * page, this.authService.getInstanceRealm());
     }
 
-    loadUnresolved(skip: number, limit: number, realm: string) {
+    loadUnresolved(skip: number, limit: number, realm: string, trailId: string) {
         this.hasLoaded = false;
+        if (trailId && trailId != "") {
+            console.log(`Looking for trailId ${trailId}`)
+            this.notificationService.getUnresolvedForTrailId(trailId).subscribe(
+                (resp) => {
+                    this.unresolvedNotifications = resp.content;
+                    this.totalUnresolvedNotification = resp.totalCount;
+                    this.hasLoaded = true;
+                });
+            return
+        }
         this.notificationService.getUnresolved(skip, limit, realm).subscribe(
             (resp) => {
                 this.unresolvedNotifications = resp.content;
@@ -194,5 +203,20 @@ export class AccessibilityNotificationViewComponent implements OnInit {
             }
 
         })
+    }
+
+    onTrailSearch(newTrailCode: string) {
+        const filteredTrails =
+            this.trailMapping.filter((it) =>
+                it.code == newTrailCode
+            );
+
+        if (newTrailCode != "" && filteredTrails.length == 0) {
+            this.unresolvedNotifications = []
+        }
+        if (filteredTrails.length > 0) {
+            this.filterTrailId = filteredTrails[0].id
+            this.loadUnresolved(0, 1000, this.realm, this.filterTrailId)
+        }
     }
 }

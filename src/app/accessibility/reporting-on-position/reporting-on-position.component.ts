@@ -185,4 +185,9 @@ export class ReportingOnPositionComponent implements OnInit {
     setNoteIssue($event: any) {
         this.formGroup.get("cause").setValue($event.target.value);
     }
+
+    selectIssue($event: any) {
+        this.selectIssueCause = $event.target.value;
+    }
+
 }
