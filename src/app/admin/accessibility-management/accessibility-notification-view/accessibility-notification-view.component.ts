@@ -208,7 +208,7 @@ export class AccessibilityNotificationViewComponent implements OnInit {
     onTrailSearch(newTrailCode: string) {
         const filteredTrails =
             this.trailMapping.filter((it) =>
-                it.code == newTrailCode
+                it.code.toLowerCase() == newTrailCode.toLowerCase()
             );
 
         if (newTrailCode != "" && filteredTrails.length == 0) {
